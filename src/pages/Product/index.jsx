@@ -1,26 +1,38 @@
 import { Typography, Container, Card, CardActions, CardContent, Grid, Button } from "@mui/material";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CartContext from '../context/cartcontext';
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import '../item.css';
+import CartContext from "../../context/cartcontext";
 import { useContext } from "react";
-const Cart = () => {
+
+const Product = ({category}) => {
+    const { subcategory } = useParams();
+    const [products, setProducts] = useState([]);
     const cart = useContext(CartContext)
-    const {cartItems,removeFromcart} = cart;
+    const {cartItems,addTocart,removeFromcart} = cart;//const cartItems = cart.cartItems;
+    
+    useEffect(() => {
+        import(`../../data/${category}/${subcategory}.js`)
+            .then((module) => {
+                setProducts(module.products);
+            })
+            .catch((error) => {
+                console.error("Error loading products:", error);
+            });
+    }, [subcategory]);
+    
+  //  const products = subcategory === "glasscare" ? glasscare :  microfiberclothes;
     return(
         <div>
-            <h1><ShoppingCartIcon style={{ fontSize: '40px' }} />Cart </h1>
+            <h2>{subcategory.charAt(0).toUpperCase() + subcategory.slice(1)}</h2>
             <Container>
                 <Grid container spacing={4} marginBottom={"50px"} maxWidth='md'>
-                    {cartItems.map((product,index) =>{
-                    return  <Grid item xm={12} key={index} >
+                    {products.map((product,index) =>{
+                    return  <Grid item sm={6} xm={12} key={index}>
                                 <Card >
-                                    <Grid container style={{display: 'flex',alignItems:'center',flexWrap: 'nowrap'}}>
-                                    <Grid item xm={5}>
-                                    <div style={{width:'200px'}}>
+                                    <div className="imgbox">
                                         <img src={product.image} alt={product.alt} />
                                     </div>
-                                    </Grid>
-                                    <Grid item xm={5}>
                                     <CardContent>
                                         <Typography gutterBottom variant="h5">
                                             {product.name}
@@ -32,13 +44,11 @@ const Cart = () => {
                                             PKR {product.price}
                                         </Typography>
                                     </CardContent>
-                                    </Grid>
-                                    <Grid item xm={2}>
                                     <CardActions style={{display:'flex',justifyContent:'space-evenly'}}>
-                                        <Button variant="contained" color="warning" onClick={()=>removeFromcart(product.name)}><DeleteIcon/></Button>
+                                        <Button variant="outlined" color="primary" onClick={()=>addTocart(product)}>Add to cart</Button>
+                                        <Button variant="contained" color="primary" >Buy Now</Button>
+                                        {console.log(cartItems)}
                                     </CardActions>
-                                    </Grid>
-                                    </Grid>
                                 </Card>
                             </Grid>
                     })} 
@@ -48,4 +58,4 @@ const Cart = () => {
     )
 }
 
-export default Cart
+export default Product
