@@ -13,6 +13,7 @@ import Product from './pages/Product/index'
 import MensShoes from './pages/beforeDynamic/mensshoes'
 import {CartContainer} from './context/cartcontext'
 import Layout from './components/layout'
+import AddProduct from './pages/addProduct'
 
 const router = createBrowserRouter([
   {
@@ -62,14 +63,16 @@ const router = createBrowserRouter([
         path:'/womensfashion/:subcategory',
         element:<Product category={"womensfashion"} />
       },
+      {
+        path:'/addproduct',
+        element:<AddProduct />
+      },
     ],
   },
 ])
 
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <CartContainer>

@@ -1,0 +1,12 @@
+.container{
+    margin-left: 10px;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+#outlined-basic{
+    width: 150%;
+    overflow-y:visible;
+    width: 50vw;
+}
